@@ -80,10 +80,35 @@ class CharInfo extends Component {
 
 const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki, comics } = char;
+    let imgStyle = null;
+    if (
+        thumbnail ===
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    ) {
+        imgStyle = { objectFit: "unset" };
+    }
+
+    function getComicsList(comics) {
+        if (!comics.length) {
+            return "There is no comics for this character";
+        } else {
+            return comics.map((item, i) => {
+                if (i > 9) {
+                    return null;
+                }
+
+                return (
+                    <li key={i} className="char__comics-item">
+                        {item.name}
+                    </li>
+                );
+            });
+        }
+    }
     return (
         <>
             <div className="char__basics">
-                <img src={thumbnail} alt={name} />
+                <img style={imgStyle} src={thumbnail} alt={name} />
                 <div>
                     <div className="char__info-name">{name}</div>
                     <div className="char__btns">
@@ -98,15 +123,7 @@ const View = ({ char }) => {
             </div>
             <div className="char__descr">{description}</div>
             <div className="char__comics">Comics:</div>
-            <ul className="char__comics-list">
-                {comics.map((item, i) => {
-                    return (
-                        <li key={i} className="char__comics-item">
-                            {item.name}
-                        </li>
-                    );
-                })}
-            </ul>
+            <ul className="char__comics-list">{getComicsList(comics)}</ul>
         </>
     );
 };
