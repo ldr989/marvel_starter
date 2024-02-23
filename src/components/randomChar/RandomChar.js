@@ -1,8 +1,8 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import { Component } from "react";
-import MarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
+import MarvelService from "../../services/MarvelService";
+
 import "./randomChar.scss";
 import mjolnir from "../../resources/img/mjolnir.png";
 
@@ -17,30 +17,40 @@ class RandomChar extends Component {
 
     componentDidMount() {
         this.updateChar();
+        // this.timerId = setInterval(this.updateChar, 15000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerId);
     }
 
     onCharLoaded = (char) => {
-        this.setState({ char, loading: false });
+        this.setState({
+            char,
+            loading: false,
+        });
+    };
+
+    onCharLoading = () => {
+        this.setState({
+            loading: true,
+        });
     };
 
     onError = () => {
-        this.setState({ loading: false, error: true });
+        this.setState({
+            loading: false,
+            error: true,
+        });
     };
 
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000);
+        this.onCharLoading();
         this.marvelService
             .getCharacter(id)
             .then(this.onCharLoaded)
             .catch(this.onError);
-    };
-
-    onUpdateChar = () => {
-        this.setState({
-            loading: true,
-            error: false,
-        });
-        this.updateChar();
     };
 
     render() {
@@ -51,7 +61,9 @@ class RandomChar extends Component {
 
         return (
             <div className="randomchar">
-                {errorMessage} {spinner} {content}
+                {errorMessage}
+                {spinner}
+                {content}
                 <div className="randomchar__static">
                     <p className="randomchar__title">
                         Random character for today!
@@ -59,10 +71,11 @@ class RandomChar extends Component {
                         Do you want to get to know him better?
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
-                    <button className="button button__main">
-                        <div className="inner" onClick={this.onUpdateChar}>
-                            try it
-                        </div>
+                    <button
+                        onClick={this.updateChar}
+                        className="button button__main"
+                    >
+                        <div className="inner">try it</div>
                     </button>
                     <img
                         src={mjolnir}
@@ -77,19 +90,21 @@ class RandomChar extends Component {
 
 const View = ({ char }) => {
     const { name, description, thumbnail, homepage, wiki } = char;
+    let imgStyle = { objectFit: "cover" };
+    if (
+        thumbnail ===
+        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+    ) {
+        imgStyle = { objectFit: "contain" };
+    }
 
     return (
         <div className="randomchar__block">
             <img
                 src={thumbnail}
-                style={
-                    thumbnail ===
-                    "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
-                        ? { objectFit: "contain" }
-                        : null
-                }
                 alt="Random character"
                 className="randomchar__img"
+                style={imgStyle}
             />
             <div className="randomchar__info">
                 <p className="randomchar__name">{name}</p>
