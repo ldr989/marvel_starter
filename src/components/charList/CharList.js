@@ -40,7 +40,7 @@ class CharList extends Component {
         return (
             <div className="char__list">
                 <ul className="char__grid">
-                    <ViewChars chars={chars} />
+                    <ViewChars chars={chars} numEmptyWrappers={9} />
                 </ul>
                 <button className="button button__main button__long">
                     <div className="inner">load more</div>
@@ -49,7 +49,7 @@ class CharList extends Component {
         );
     }
 }
-const ViewChars = ({ chars }) => {
+const ViewChars = ({ chars, numEmptyWrappers }) => {
     function cloneEmptyWrapper(num) {
         let result = [];
         for (let i = 0; i < num; i++) {
@@ -90,7 +90,7 @@ const ViewChars = ({ chars }) => {
             );
         });
     } else {
-        return <>{cloneEmptyWrapper(9)}</>;
+        return <>{cloneEmptyWrapper(numEmptyWrappers)}</>;
     }
 };
 
