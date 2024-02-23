@@ -35,20 +35,12 @@ class CharList extends Component {
     };
 
     render() {
-        const { chars, loading } = this.state;
+        const { chars } = this.state;
 
         return (
             <div className="char__list">
                 <ul className="char__grid">
-                    <ViewChars chars={chars} num={0} loading={loading} />
-                    <ViewChars chars={chars} num={1} loading={loading} />
-                    <ViewChars chars={chars} num={2} loading={loading} />
-                    <ViewChars chars={chars} num={3} loading={loading} />
-                    <ViewChars chars={chars} num={4} loading={loading} />
-                    <ViewChars chars={chars} num={5} loading={loading} />
-                    <ViewChars chars={chars} num={6} loading={loading} />
-                    <ViewChars chars={chars} num={7} loading={loading} />
-                    <ViewChars chars={chars} num={8} loading={loading} />
+                    <ViewChars chars={chars} />
                 </ul>
                 <button className="button button__main button__long">
                     <div className="inner">load more</div>
@@ -57,35 +49,48 @@ class CharList extends Component {
         );
     }
 }
-const ViewChars = ({ chars, num }) => {
+const ViewChars = ({ chars }) => {
+    function cloneEmptyWrapper(num) {
+        let result = [];
+        for (let i = 0; i < num; i++) {
+            result.push(
+                <li
+                    className="char__item"
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                    key={i}
+                >
+                    <Spinner />
+                </li>
+            );
+        }
+        return result;
+    }
+
     if (chars.length > 0) {
-        return (
-            <li className="char__item">
-                <img
-                    src={chars[num].thumbnail}
-                    style={
-                        chars[num].thumbnail ===
-                        "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
-                            ? { objectFit: "contain" }
-                            : { objectFit: "cover" }
-                    }
-                    alt={chars[num].name}
-                />
-                <div className="char__name">{chars[num].name}</div>
-            </li>
-        );
+        const stub =
+            "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
+
+        return chars.map((char, i) => {
+            return (
+                <li className="char__item" key={i}>
+                    <img
+                        src={char.thumbnail}
+                        style={
+                            char.thumbnail === stub
+                                ? { objectFit: "contain" }
+                                : { objectFit: "cover" }
+                        }
+                        alt={char.name}
+                    />
+                    <div className="char__name">{char.name}</div>
+                </li>
+            );
+        });
     } else {
-        return (
-            <li
-                className="char__item"
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                }}
-            >
-                <Spinner />
-            </li>
-        );
+        return <>{cloneEmptyWrapper(9)}</>;
     }
 };
 
