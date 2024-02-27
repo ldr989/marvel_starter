@@ -72,6 +72,7 @@ class RandomChar extends Component {
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
                     <button
+                        tabIndex={2}
                         onClick={this.updateChar}
                         className="button button__main"
                     >
@@ -110,10 +111,18 @@ const View = ({ char }) => {
                 <p className="randomchar__name">{name}</p>
                 <p className="randomchar__descr">{description}</p>
                 <div className="randomchar__btns">
-                    <a href={homepage} className="button button__main">
+                    <a
+                        href={homepage}
+                        className="button button__main"
+                        tabIndex={3}
+                    >
                         <div className="inner">homepage</div>
                     </a>
-                    <a href={wiki} className="button button__secondary">
+                    <a
+                        href={wiki}
+                        className="button button__secondary"
+                        tabIndex={3}
+                    >
                         <div className="inner">Wiki</div>
                     </a>
                 </div>

@@ -61,11 +61,24 @@ class CharList extends Component {
         });
     };
 
+    onKeyDownHandler = (event, callback, id) => {
+        if (event.key === " " || event.key === "Enter") {
+            event.preventDefault();
+            return callback(id);
+        }
+    };
+
     // Этот метод создан для оптимизации,
     // чтобы не помещать такую конструкцию в метод render
     renderItems(arr) {
+        const { charId, onCharSelected } = this.props;
+
         const items = arr.map((item) => {
             let imgStyle = { objectFit: "cover" };
+            let className = "char__item";
+            if (item.id === charId) {
+                className += " char__item_selected";
+            }
             if (
                 item.thumbnail ===
                 "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
@@ -75,9 +88,13 @@ class CharList extends Component {
 
             return (
                 <li
-                    className="char__item"
+                    className={className}
                     key={item.id}
-                    onClick={() => this.props.onCharSelected(item.id)}
+                    tabIndex={3}
+                    onKeyDown={(e) =>
+                        this.onKeyDownHandler(e, onCharSelected, item.id)
+                    }
+                    onClick={() => onCharSelected(item.id)}
                 >
                     <img
                         src={item.thumbnail}
