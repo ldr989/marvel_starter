@@ -8,7 +8,7 @@ class MarvelService {
         if (!res.ok) {
             throw new Error(`Could not fetch ${url}, status: ${res.status}`);
         }
-
+        console.log("request");
         return await res.json();
     };
 
