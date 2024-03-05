@@ -1,41 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import PropTypes from "prop-types";
+import { useGetList } from "../../hooks/getList.hook";
 
 import Spinner from "../spinner/Spinner";
 import ErrorMessage from "../errorMessage/ErrorMessage";
-import useMarvelService from "../../services/MarvelService";
+// import useMarvelService from "../../services/MarvelService";
 import "./charList.scss";
 
 const CharList = (props) => {
-    const [charList, setCharList] = useState([]);
-    const [newItemLoading, setNewItemLoading] = useState(false);
-    const [offset, setOffset] = useState(210);
-    const [charEnded, setCharEnded] = useState(false);
-
-    const { loading, error, getAllCharacters } = useMarvelService();
+    const {
+        list,
+        newItemLoading,
+        offset,
+        listEnded,
+        loading,
+        error,
+        onRequest,
+    } = useGetList(9);
 
     useEffect(() => {
         onRequest(offset, true);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-    const onRequest = (offset, initial) => {
-        initial ? setNewItemLoading(false) : setNewItemLoading(true);
-        getAllCharacters(offset).then(onCharListLoaded);
-    };
-
-    const onCharListLoaded = (newCharList) => {
-        let ended = false;
-        if (newCharList.length < 9) {
-            ended = true;
-        }
-
-        setCharList((charList) => [...charList, ...newCharList]);
-        setNewItemLoading(false);
-        setOffset((offset) => offset + 9);
-        setCharEnded(ended);
-    };
-
     const itemRefs = useRef([]);
 
     const focusOnItem = (id) => {
@@ -96,7 +82,7 @@ const CharList = (props) => {
         return <ul className="char__grid">{items}</ul>;
     }
 
-    const items = renderItems(charList);
+    const items = renderItems(list);
 
     const errorMessage = error ? <ErrorMessage /> : null;
     const spinner = loading && !newItemLoading ? <Spinner /> : null;
@@ -109,7 +95,7 @@ const CharList = (props) => {
             <button
                 className="button button__main button__long"
                 disabled={newItemLoading}
-                style={{ display: charEnded ? "none" : "block" }}
+                style={{ display: listEnded ? "none" : "block" }}
                 onClick={() => onRequest(offset)}
             >
                 <div className="inner">load more</div>
