@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
@@ -80,10 +81,17 @@ const View = ({ char }) => {
                 {comics.map((item, i) => {
                     // eslint-disable-next-line array-callback-return
                     if (i > 9) return;
+                    const itemId = +item.resourceURI.substring(
+                        item.resourceURI.lastIndexOf("/") + 1
+                    );
                     return (
-                        <li key={i} className="char__comics-item">
+                        <Link
+                            to={`/comics/${itemId}`}
+                            key={i}
+                            className="char__comics-item"
+                        >
                             {item.name}
-                        </li>
+                        </Link>
                     );
                 })}
             </ul>
