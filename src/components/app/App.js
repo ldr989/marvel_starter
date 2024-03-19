@@ -15,7 +15,7 @@ const App = () => {
             <div className="app">
                 <AppHeader />
                 <main>
-                    <Suspense fallback={<Spinner />}>
+                    <Suspense fallback={<Spinner width={200} height={200} />}>
                         <Switch>
                             <Route exact path="/">
                                 <MainPage />

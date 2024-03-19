@@ -109,7 +109,10 @@ const CharList = (props) => {
     const items = renderItems(charList);
 
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
+    const spinner =
+        loading && !newItemLoading ? (
+            <Spinner width={200} height={200} />
+        ) : null;
 
     return (
         <div className="char__list">

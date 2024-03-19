@@ -35,7 +35,8 @@
     }
 }
 
-.error {
+.error,
+.success {
     margin-top: 25px;
     font-family: "Roboto Condensed";
     font-style: normal;
@@ -44,4 +45,16 @@
     line-height: 21px;
 
     color: #9f0013;
+}
+
+.successBlock {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    align-items: center;
+    .success {
+        margin-top: 0;
+        color: #03710e;
+        vertical-align: middle;
+    }
 }
