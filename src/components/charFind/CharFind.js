@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import useMarvelService from "../../services/MarvelService";
@@ -31,14 +32,24 @@ const CharFind = () => {
                 The character was not found. Check the name and try again
             </div>
         ) : null;
-    const spinner = loading ? <Spinner width={30} height={30} /> : null;
+    const spinner = loading ? (
+        <div className="spinnerWrapper">
+            <Spinner width={30} height={30} />
+        </div>
+    ) : null;
     const content = !(loading || error || !char.length) ? (
         <SuccessBlock char={char[0]} />
     ) : null;
 
-    const handleSubmit = (values, { resetForm }) => {
+    const handleSubmit = (values) => {
         updateChar(values.charName);
         document.activeElement.blur(); // Снять фокус с поля ввода
+    };
+
+    const compareValues = (e) => {
+        if (char.length > 0 && e.target.value.length !== char[0].name.length) {
+            setChar([]);
+        }
     };
 
     return (
@@ -60,13 +71,14 @@ const CharFind = () => {
                     name="charName"
                     type="text"
                     placeholder="Enter name"
-                    onFocus={() => {
+                    onFocus={(e) => {
                         if (notFound) {
                             setNotFound(false);
                         }
-                        if (char.length > 0) {
-                            setChar([]);
-                        }
+                        compareValues(e);
+                    }}
+                    onBlur={(e) => {
+                        compareValues(e);
                     }}
                 />
                 <button type="submit" className="button button__main">
@@ -89,12 +101,15 @@ const SuccessBlock = (props) => {
     return (
         <div className="successBlock">
             <div className="success">
-                {console.log(props.char)}
                 There is! Visit {props.char.name} page?
             </div>
-            <button className="button button__secondary">
+            <Link
+                to={`/${props.char.id}`}
+                type="button"
+                className="button button__secondary"
+            >
                 <div className="inner">TO PAGE</div>
-            </button>
+            </Link>
         </div>
     );
 };

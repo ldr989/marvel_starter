@@ -2,6 +2,7 @@ import { Link, NavLink } from "react-router-dom";
 import "./appHeader.scss";
 
 const AppHeader = () => {
+    // const location = useLocation();
     return (
         <header className="app__header">
             <h1 className="app__title">
@@ -13,8 +14,11 @@ const AppHeader = () => {
                 <ul>
                     <li>
                         <NavLink
-                            exact
                             activeStyle={{ color: "#9f0013" }}
+                            isActive={(match, location) =>
+                                match &&
+                                !location.pathname.startsWith("/comics")
+                            }
                             to="/"
                         >
                             Characters
