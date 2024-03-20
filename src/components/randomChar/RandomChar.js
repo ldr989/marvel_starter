@@ -30,7 +30,7 @@ const RandomChar = () => {
     };
 
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading ? <Spinner /> : null;
+    const spinner = loading ? <Spinner width={200} heigth={200} /> : null;
     const content = !(loading || error) ? <View char={char} /> : null;
 
     return (

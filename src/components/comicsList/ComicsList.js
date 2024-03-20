@@ -60,7 +60,10 @@ const ComicsList = () => {
     const items = renderItems(comicsList);
 
     const errorMessage = error ? <ErrorMessage /> : null;
-    const spinner = loading && !newItemLoading ? <Spinner /> : null;
+    const spinner =
+        loading && !newItemLoading ? (
+            <Spinner width={200} height={200} />
+        ) : null;
 
     return (
         <div className="comics__list">
